@@ -9,7 +9,7 @@ type Logrus struct {
 }
 
 func NewLogrus() *Logrus {
-	return &Logrus{Entry: &logrus.Entry{}}
+	return &Logrus{Entry: logrus.NewEntry(logrus.New())}
 }
 
 func (l *Logrus) logBuilder(url string, params map[string]interface{}, err error) *logrus.Entry {
