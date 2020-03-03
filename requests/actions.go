@@ -2,6 +2,7 @@ package requests
 
 import (
 	"github.com/lueurxax/go-admitad-client/enums"
+	"strconv"
 	"time"
 )
 
@@ -31,4 +32,25 @@ type Actions struct {
 	Processed          enums.Processed
 	Paid               enums.Paid
 	OrderBy            []string
+}
+
+func (a *Actions) Params() (map[string]string, map[string]interface{}) {
+	params := map[string]string{}
+	logParams := map[string]interface{}{}
+	if a == nil {
+		return params, logParams
+	}
+	if a.Limit != 0 {
+		logParams["limit"] = a.Limit
+		params["limit"] = strconv.Itoa(a.Limit)
+	}
+	if a.Offset != nil {
+		logParams["offset"] = *a.Offset
+		params["offset"] = strconv.Itoa(*a.Offset)
+	}
+	if a.DateStart != nil {
+		logParams["date_start"] = a.DateStart
+		params["date_start"] = a.DateStart.Format("02.01.2006")
+	}
+	return params, logParams
 }

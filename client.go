@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/lueurxax/go-admitad-client/defaults"
 	"github.com/lueurxax/go-admitad-client/responses"
 	"time"
 )
@@ -27,7 +28,13 @@ type MetricsCollector interface {
 }
 
 func New(url string, logger Logger, mc MetricsCollector) *AClient {
-	bc := newBaseClient(url)
+	if logger == nil {
+		logger = defaults.NewLogrus()
+	}
+	if mc == nil {
+		mc = &defaults.EmptyMetrics{}
+	}
+	bc := newBaseClient(url, logger, mc)
 	return &AClient{Statistics: Statistics{bc}, bc: bc}
 }
 
@@ -42,10 +49,13 @@ type baseClient struct {
 	auth     *auth
 	clientID string
 	scope    string
+
+	logger  Logger
+	metrics MetricsCollector
 }
 
-func newBaseClient(url string) *baseClient {
-	return &baseClient{Client: resty.New().SetHostURL(url)}
+func newBaseClient(url string, logger Logger, metrics MetricsCollector) *baseClient {
+	return &baseClient{Client: resty.New().SetHostURL(url), logger: logger, metrics: metrics}
 }
 
 func (ac *AClient) SetAuth(clientID, clientSecret, scope string) error {
@@ -80,11 +90,17 @@ func (b *baseClient) autoRefresh(force bool) error {
 	if b.auth == nil {
 		return fmt.Errorf("need use SetAuth for set auth data")
 	}
+
 	if b.auth.tokenExpiredAt.Sub(time.Now()) > 0 && !force {
+		b.logger.Debug("token is actual", "/token/", nil, nil)
 		return nil
 	}
-	answer := new(responses.Token)
-	errResponse := new(responses.ErrorResponse)
+	answer, errResponse := new(responses.Token), new(responses.ErrorResponse)
+
+	logParams := map[string]interface{}{"force": force}
+
+	b.logger.Debug("make request", "/token/", logParams, nil)
+
 	resp, err := b.R().EnableTrace().
 		SetFormData(map[string]string{
 			"grant_type":    "refresh_token",
@@ -95,14 +111,22 @@ func (b *baseClient) autoRefresh(force bool) error {
 		SetResult(answer).
 		SetError(errResponse).
 		Post("/token/")
+
 	if err != nil {
+		b.logger.Error("http error", "/statistics/actions/", logParams, err)
 		return err
 	}
+
+	b.metrics.Collect("/statistics/actions/", resp.StatusCode(), errResponse.StatusCode, resp.Time())
+
 	if resp.Error() != nil {
+		b.logger.Error("app error", "/statistics/actions/", errResponse.ErrLogParams(logParams), errResponse)
 		return errResponse
 	}
 
 	b.setToken(answer)
+
+	b.logger.Debug("success response", "/token/", nil, nil)
 
 	return nil
 }
