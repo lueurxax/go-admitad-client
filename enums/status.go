@@ -8,3 +8,12 @@ const (
 	Declined           Status = "declined"
 	ApprovedButStalled Status = "approved_but_stalled"
 )
+
+type StatusID int
+
+const (
+	New StatusID = iota
+	InWork
+	Waiting
+	Closed
+)

@@ -17,9 +17,7 @@ func (c *Payment) Settings() error {
 	errResponse := new(responses.ErrorResponse)
 
 	resp, err := c.baseClient.R().EnableTrace().
-		SetFormData(map[string]string{
-			"Authorization": c.baseClient.Token,
-		}).
+		SetAuthToken(c.baseClient.Token).
 		SetResult(answer).
 		SetError(errResponse).
 		Post("/me/payment/settings/")

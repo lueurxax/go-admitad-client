@@ -6,7 +6,7 @@ import (
 
 type Ticket struct {
 	AdvCampaign  interface{}    `json:"advcampaign"`
-	Status       int            `json:"status"` // Статус (1 - Новый, 2 - В работе, 3 - Ожидает, 4 - Закрыт)
+	Status       enums.StatusID `json:"status"` // Статус (1 - Новый, 2 - В работе, 3 - Ожидает, 4 - Закрыт)
 	Category     Category       `json:"category"`
 	DateModified string         `json:"date_modified"` // Дата и время последнего обновления тикета
 	Text         string         `json:"text"`          // HTML текст
@@ -16,7 +16,7 @@ type Ticket struct {
 	DateCreated  string         `json:"date_created"` // Дата и время создания тикета
 	ID           int            `json:"id"`           // Идентификатор тикета
 	Subject      string         `json:"subject"`      // Тема тикета
-	Comments     []interface{} `json:"comments,omitempty"`
+	Comments     []interface{}  `json:"comments,omitempty"`
 }
 type Category struct {
 	Name string `json:"name"`

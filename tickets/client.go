@@ -1,6 +1,7 @@
 package tickets
 
 import (
+	"fmt"
 	client "github.com/lueurxax/go-admitad-client"
 	"github.com/lueurxax/go-admitad-client/requests"
 	"github.com/lueurxax/go-admitad-client/responses"
@@ -21,7 +22,7 @@ func (c *Ticket) TicketByID(id int) error {
 		SetAuthToken(c.baseClient.Token).
 		SetResult(answer).
 		SetError(errResponse).
-		Post("/tickets/" + strconv.Itoa(id))
+		Get("/tickets/" + strconv.Itoa(id))
 
 	if err != nil {
 		return err
@@ -43,7 +44,7 @@ func (c *Ticket) Ticket(ticket requests.Ticket) error {
 	params := map[string]string{}
 
 	if ticket.Status != 0 {
-		params["status"] = strconv.Itoa(ticket.Status)
+		params["status"] = strconv.Itoa(int(ticket.Status))
 	}
 
 	if ticket.Limit != 0 {
@@ -67,7 +68,7 @@ func (c *Ticket) Ticket(ticket requests.Ticket) error {
 		SetAuthToken(c.baseClient.Token).
 		SetResult(answer).
 		SetError(errResponse).
-		Post("/tickets/")
+		Get("/tickets/")
 
 	if err != nil {
 		return err
@@ -97,7 +98,7 @@ func (c *Ticket) CreateTicket(ticket requests.CreateTicket) error {
 	}
 
 	if ticket.Priority != 0 {
-		params["priority"] = strconv.Itoa(ticket.Priority)
+		params["priority"] = strconv.Itoa(int(ticket.Priority))
 	}
 
 	if ticket.Text != "" {
@@ -114,6 +115,38 @@ func (c *Ticket) CreateTicket(ticket requests.CreateTicket) error {
 		SetResult(answer).
 		SetError(errResponse).
 		Post("/tickets/create/")
+
+	if err != nil {
+		return err
+	}
+
+	if resp.Error() != nil {
+		return errResponse
+	}
+
+	return nil
+}
+
+// todo: naming, testing, function description
+// https://www.admitad.com/ru/developers/doc/api_ru/methods/tickets/tickets-list/
+func (c *Ticket) CreateTicketCommentOn(comment requests.TicketComment) error {
+	answer := new(responses.Ticket)
+	errResponse := new(responses.ErrorResponse)
+
+	postPath := fmt.Sprintf("/tickets/%d/create/", comment.ID)
+
+	params := map[string]string{}
+
+	if comment.Comment != "" {
+		params["text"] = comment.Comment
+	}
+
+	resp, err := c.baseClient.R().EnableTrace().
+		SetFormData(params).
+		SetAuthToken(c.baseClient.Token).
+		SetResult(answer).
+		SetError(errResponse).
+		Post(postPath)
 
 	if err != nil {
 		return err

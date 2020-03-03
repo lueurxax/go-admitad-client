@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"github.com/lueurxax/go-admitad-client/enums"
 	"time"
 )
 
@@ -10,7 +11,7 @@ import (
 // 3 (Ожидает)
 // 4 (Закрыт)
 type Ticket struct {
-	Status    int
+	Status    enums.StatusID
 	DateStart *time.Time // %d.%m.%Y
 	DateEnd   *time.Time // %d.%m.%Y
 	Limit     int
@@ -26,5 +27,10 @@ type CreateTicket struct {
 	Text        string
 	AdvCampaign int
 	Category    int
-	Priority    int
+	Priority    enums.Priority
+}
+
+type TicketComment struct {
+	ID      int
+	Comment string
 }
