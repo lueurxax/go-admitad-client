@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/lueurxax/go-admitad-client/requests"
 	"github.com/lueurxax/go-admitad-client/responses"
-	"strconv"
 )
 
 type Statistics struct {
@@ -29,31 +28,34 @@ func (s *Statistics) Actions(request *requests.Actions) (*responses.Actions, err
 }
 
 func (s *Statistics) actions(request *requests.Actions) (*responses.Actions, error) {
-	data := new(responses.Actions)
-	errResponse := new(responses.ErrorResponse)
-	params := map[string]string{}
-	if request.Limit != 0 {
-		params["limit"] = strconv.Itoa(request.Limit)
-	}
-	if request.Offset != nil {
-		params["offset"] = strconv.Itoa(*request.Offset)
-	}
-	if request.DateStart != nil {
-		params["date_start"] = request.DateStart.Format("02.01.2006")
-	}
+	data, errResponse := new(responses.Actions), new(responses.ErrorResponse)
+
+	httpParams, logParams := request.Params()
+
+	s.logger.Debug("make request", "/statistics/actions/", logParams, nil)
+
 	resp, err := s.R().
-		SetQueryParams(params).
+		SetQueryParams(httpParams).
 		EnableTrace().
 		SetAuthToken(s.auth.token).
 		SetResult(data).
 		SetError(errResponse).
 		Get("/statistics/actions/")
+
 	if err != nil {
+		s.logger.Error("http error", "/statistics/actions/", logParams, err)
 		return nil, err
 	}
+
+	s.metrics.Collect("/statistics/actions/", resp.StatusCode(), errResponse.StatusCode, resp.Time())
+
 	if resp.Error() != nil {
+		s.logger.Error("app error", "/statistics/actions/", errResponse.ErrLogParams(logParams), errResponse)
 		return nil, errResponse
 	}
+
+	s.logger.Debug("success request", "/statistics/actions/", logParams, nil)
+
 	return data, nil
 }
 
