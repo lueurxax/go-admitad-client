@@ -12,7 +12,21 @@ type AClient struct {
 	bc *baseClient
 }
 
-func New(url string) *AClient {
+// msg - human readable message, url - using url path, params - map of parameters in request, err - error
+type Logger interface {
+	Panic(msg string, url string, params map[string]interface{}, err error)
+	Error(msg string, url string, params map[string]interface{}, err error)
+	Warn(msg string, url string, params map[string]interface{}, err error)
+	Info(msg string, url string, params map[string]interface{}, err error)
+	Debug(msg string, url string, params map[string]interface{}, err error)
+	Trace(msg string, url string, params map[string]interface{}, err error)
+}
+
+type MetricsCollector interface {
+	Collect(url string, httpCode int, appCode int, duration time.Duration)
+}
+
+func New(url string, logger Logger, mc MetricsCollector) *AClient {
 	bc := newBaseClient(url)
 	return &AClient{Statistics: Statistics{bc}, bc: bc}
 }
