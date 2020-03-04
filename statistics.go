@@ -2,16 +2,17 @@ package client
 
 import (
 	"fmt"
+	"github.com/lueurxax/go-admitad-client/internal"
 	"github.com/lueurxax/go-admitad-client/requests"
 	"github.com/lueurxax/go-admitad-client/responses"
 )
 
 type Statistics struct {
-	*baseClient
+	b *internal.BaseClient
 }
 
 func (s *Statistics) Actions(request *requests.Actions) (*responses.Actions, error) {
-	if err := s.baseClient.autoRefresh(false); err != nil {
+	if err := s.b.AutoRefresh(false); err != nil {
 		return nil, err
 	}
 	resp, err := s.actions(request)
@@ -19,7 +20,7 @@ func (s *Statistics) Actions(request *requests.Actions) (*responses.Actions, err
 		if !IsAuthError(err) {
 			return nil, err
 		}
-		if err2 := s.autoRefresh(true); err2 != nil {
+		if err2 := s.b.AutoRefresh(true); err2 != nil {
 			return nil, fmt.Errorf("request err: %s, refresh token err: %s", err.Error(), err2.Error())
 		}
 		return s.actions(request)
@@ -32,29 +33,29 @@ func (s *Statistics) actions(request *requests.Actions) (*responses.Actions, err
 
 	httpParams, logParams := request.Params()
 
-	s.logger.Debug("make request", "/statistics/actions/", logParams, nil)
+	s.b.Logger.Debug("make request", "/statistics/actions/", logParams, nil)
 
-	resp, err := s.R().
+	resp, err := s.b.R().
 		SetQueryParams(httpParams).
 		EnableTrace().
-		SetAuthToken(s.auth.token).
+		SetAuthToken(s.b.Auth.Token).
 		SetResult(data).
 		SetError(errResponse).
 		Get("/statistics/actions/")
 
 	if err != nil {
-		s.logger.Error("http error", "/statistics/actions/", logParams, err)
+		s.b.Logger.Error("http error", "/statistics/actions/", logParams, err)
 		return nil, err
 	}
 
-	s.metrics.Collect("/statistics/actions/", resp.StatusCode(), errResponse.StatusCode, resp.Time())
+	s.b.Metrics.Collect("/statistics/actions/", resp.StatusCode(), errResponse.StatusCode, resp.Time())
 
 	if resp.Error() != nil {
-		s.logger.Error("app error", "/statistics/actions/", errResponse.ErrLogParams(logParams), errResponse)
+		s.b.Logger.Error("app error", "/statistics/actions/", errResponse.ErrLogParams(logParams), errResponse)
 		return nil, errResponse
 	}
 
-	s.logger.Debug("success request", "/statistics/actions/", logParams, nil)
+	s.b.Logger.Debug("success request", "/statistics/actions/", logParams, nil)
 
 	return data, nil
 }
