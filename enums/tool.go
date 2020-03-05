@@ -8,7 +8,7 @@ const (
 	Products             Tool = "products"
 	ReTag                Tool = "retag"
 	PostView             Tool = "postview"
-	LostOrdersTool           Tool = "lost_orders"
+	LostOrdersTool       Tool = "lost_orders"
 	BrokerTraffic        Tool = "broker_traffic"
 	CouponsTool          Tool = "coupons"
 	BasketTracking       Tool = "basket_tracking"
