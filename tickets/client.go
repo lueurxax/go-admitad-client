@@ -2,14 +2,14 @@ package tickets
 
 import (
 	"fmt"
-	client "github.com/lueurxax/go-admitad-client"
+	"github.com/lueurxax/go-admitad-client/internal"
 	"github.com/lueurxax/go-admitad-client/requests"
 	"github.com/lueurxax/go-admitad-client/responses"
 	"strconv"
 )
 
 type Ticket struct {
-	baseClient *client.AClient
+	baseClient *internal.BaseClient
 }
 
 // todo: naming, testing, function description

@@ -1,14 +1,14 @@
 package referrals
 
 import (
-	client "github.com/lueurxax/go-admitad-client"
+	"github.com/lueurxax/go-admitad-client/internal"
 	"github.com/lueurxax/go-admitad-client/requests"
 	"github.com/lueurxax/go-admitad-client/responses"
 	"strconv"
 )
 
 type Referrals struct {
-	baseClient *client.AClient
+	baseClient *internal.BaseClient
 }
 
 // todo: naming, testing, function description

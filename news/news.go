@@ -1,7 +1,7 @@
-package client
+package news
 
 import (
-
+	"github.com/lueurxax/go-admitad-client/internal"
 	"github.com/lueurxax/go-admitad-client/requests"
 	"github.com/lueurxax/go-admitad-client/responses"
 	"strconv"
@@ -9,7 +9,7 @@ import (
 
 type News struct {
 	// *client.AClient
-
+	*internal.BaseClient
 }
 
 // todo: naming, testing, function description
