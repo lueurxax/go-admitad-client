@@ -26,7 +26,7 @@ type Actions struct {
 	Status             enums.Status
 	Keyword            string
 	Action             string
-	ActionID           int
+	ActionID           *int
 	Banner             string
 	ActionType         enums.ActionType
 	Processed          enums.Processed
@@ -39,6 +39,9 @@ func (a *Actions) Params() (map[string]string, map[string]interface{}) {
 	logParams := map[string]interface{}{}
 	if a == nil {
 		return params, logParams
+	}
+	if a.ActionID != nil {
+		params["action_id"] = strconv.Itoa(*a.ActionID)
 	}
 	if a.Limit != 0 {
 		logParams["limit"] = a.Limit
