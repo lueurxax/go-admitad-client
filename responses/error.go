@@ -7,9 +7,13 @@ type ErrorResponse struct {
 	StatusCode       int    `json:"status_code"`
 	ErrorCode        int    `json:"error_code"`
 	ErrorField       string `json:"error"`
+	Detail           string `json:"detail"`
 }
 
 func (e *ErrorResponse) Error() string {
+	if e.Detail != "" {
+		return fmt.Sprintf("api error: %s", e.Detail)
+	}
 	return fmt.Sprintf("api error: %s", e.ErrorDescription)
 }
 
