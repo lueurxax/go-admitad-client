@@ -61,7 +61,35 @@ func (s *Statistics) actions(request *requests.Actions) (*responses.Actions, err
 }
 
 func (s *Statistics) ActionsTotal(request requests.Actions) (*responses.ActionsTotal, error) {
-	panic("method not implemented")
+	data, errResponse := new(responses.ActionsTotal), new(responses.ErrorResponse)
+
+	httpParams, logParams := request.ParamsTotal()
+
+	s.b.Logger.Debug("make request", "/statistics/actions/", logParams, nil)
+
+	resp, err := s.b.R().
+		SetQueryParams(httpParams).
+		EnableTrace().
+		SetAuthToken(s.b.Auth.Token).
+		SetResult(data).
+		SetError(errResponse).
+		Get("/statistics/actions/")
+
+	if err != nil {
+		s.b.Logger.Error("http error", "/statistics/actions/", logParams, err)
+		return nil, err
+	}
+
+	s.b.Metrics.Collect("/statistics/actions/", resp.StatusCode(), errResponse.StatusCode, resp.Time())
+
+	if resp.Error() != nil {
+		s.b.Logger.Error("app error", "/statistics/actions/", errResponse.ErrLogParams(logParams), errResponse)
+		return nil, errResponse
+	}
+
+	s.b.Logger.Debug("success request", "/statistics/actions/", logParams, nil)
+
+	return data, nil
 }
 
 func (s *Statistics) SubID(request *requests.StatisticsSubID) (*responses.ResultsStats, error) {
