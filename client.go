@@ -4,12 +4,19 @@ import (
 	"fmt"
 	"github.com/go-resty/resty/v2"
 	"github.com/lueurxax/go-admitad-client/defaults"
+	"github.com/lueurxax/go-admitad-client/news"
+	"github.com/lueurxax/go-admitad-client/referrals"
 	"github.com/lueurxax/go-admitad-client/responses"
+	"github.com/lueurxax/go-admitad-client/tickets"
 	"time"
 )
 
 type AClient struct {
 	Statistics
+	news.News
+	referrals.Referrals
+	tickets.Ticket
+
 	bc *baseClient
 }
 

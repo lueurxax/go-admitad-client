@@ -1,4 +1,4 @@
-package news
+package client
 
 import (
 	client "github.com/lueurxax/go-admitad-client"
@@ -8,17 +8,18 @@ import (
 )
 
 type News struct {
-	baseClient *client.AClient
+	// *client.AClient
+	*client.AClient
 }
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/news/news/
-func (c *News) NewsByID(id int) error {
+func (c *News) ByID(id int) error {
 	answer := new(responses.News)
 	errResponse := new(responses.ErrorResponse)
 
-	resp, err := c.baseClient.R().EnableTrace().
-		SetAuthToken(c.baseClient.Token).
+	resp, err := c.R().EnableTrace().
+		SetAuthToken(c.Token).
 		SetResult(answer).
 		SetError(errResponse).
 		Get("/news/" + strconv.Itoa(id))
@@ -36,7 +37,7 @@ func (c *News) NewsByID(id int) error {
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/news/news/
-func (c *News) News(news requests.News) error {
+func (c *News) Get(news requests.News) error {
 	answer := new(responses.News)
 	errResponse := new(responses.ErrorResponse)
 
@@ -54,8 +55,8 @@ func (c *News) News(news requests.News) error {
 		params["language"] = string(news.Language)
 	}
 
-	resp, err := c.baseClient.R().EnableTrace().
-		SetAuthToken(c.baseClient.Token).
+	resp, err := c.R().EnableTrace().
+		SetAuthToken(c.Token).
 		SetResult(answer).
 		SetError(errResponse).
 		Get("/news/")

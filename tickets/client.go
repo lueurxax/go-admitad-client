@@ -14,7 +14,7 @@ type Ticket struct {
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/tickets/tickets-list/
-func (c *Ticket) TicketByID(id int) error {
+func (c *Ticket) ByID(id int) error {
 	answer := new(responses.Ticket)
 	errResponse := new(responses.ErrorResponse)
 
@@ -37,7 +37,7 @@ func (c *Ticket) TicketByID(id int) error {
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/tickets/tickets-list/
-func (c *Ticket) Ticket(ticket requests.Ticket) error {
+func (c *Ticket) Get(ticket requests.Ticket) error {
 	answer := new(responses.Ticket)
 	errResponse := new(responses.ErrorResponse)
 
@@ -84,7 +84,7 @@ func (c *Ticket) Ticket(ticket requests.Ticket) error {
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/tickets/tickets-create/
 // Все значения в структуре requests.CreateTicket обязательные
-func (c *Ticket) CreateTicket(ticket requests.CreateTicket) error {
+func (c *Ticket) Create(ticket requests.CreateTicket) error {
 	answer := new(responses.Ticket)
 	errResponse := new(responses.ErrorResponse)
 	params := map[string]string{}
@@ -129,7 +129,7 @@ func (c *Ticket) CreateTicket(ticket requests.CreateTicket) error {
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/tickets/tickets-list/
-func (c *Ticket) CreateTicketCommentOn(comment requests.TicketComment) error {
+func (c *Ticket) CreateCommentOn(comment requests.TicketComment) error {
 	answer := new(responses.Ticket)
 	errResponse := new(responses.ErrorResponse)
 
