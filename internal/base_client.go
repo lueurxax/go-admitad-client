@@ -88,7 +88,7 @@ func (b *BaseClient) AutoRefresh(force bool) error {
 
 func (b *BaseClient) setToken(token *responses.Token) {
 	b.Auth = &auth{
-		tokenExpiredAt: time.Now().Add(time.Duration(token.ExpiresIN)*time.Second - 5*time.Minute),
+		tokenExpiredAt: time.Now().Add(time.Duration(token.ExpiresIn)*time.Second - 5*time.Minute),
 		Token:          token.AccessToken,
 		refreshToken:   token.RefreshToken,
 	}
