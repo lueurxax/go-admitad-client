@@ -20,7 +20,7 @@ func (c *Payment) Settings() error {
 		SetAuthToken(c.baseClient.Token).
 		SetResult(answer).
 		SetError(errResponse).
-		Post("/me/payment/settings/")
+		Get("/me/payment/settings/")
 
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func (c *Payment) SettingsByCurrency(currency enums.Currency) error {
 		SetAuthToken(c.baseClient.Token).
 		SetResult(answer).
 		SetError(errResponse).
-		Post("/me/payment/settings/" + string(currency))
+		Get("/me/payment/settings/" + string(currency))
 
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func (c *Payment) Balance() error {
 		SetAuthToken(c.baseClient.Token).
 		SetResult(answer).
 		SetError(errResponse).
-		Post("/me/balance/")
+		Get("/me/balance/")
 
 	if err != nil {
 		return err
@@ -89,7 +89,7 @@ func (c *Payment) BalanceExtended() error {
 		SetAuthToken(c.baseClient.Token).
 		SetResult(answer).
 		SetError(errResponse).
-		Post("/me/balance/extended/")
+		Get("/me/balance/extended/")
 
 	if err != nil {
 		return err
@@ -112,7 +112,7 @@ func (c *Payment) Me() error {
 		SetAuthToken(c.baseClient.Token).
 		SetResult(answer).
 		SetError(errResponse).
-		Post("/me/")
+		Get("/me/")
 
 	if err != nil {
 		return err
