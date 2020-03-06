@@ -2,7 +2,6 @@ package offline_receipts
 
 import (
 	"fmt"
-	client "github.com/lueurxax/go-admitad-client"
 	"github.com/lueurxax/go-admitad-client/internal"
 	"github.com/lueurxax/go-admitad-client/requests"
 	"github.com/lueurxax/go-admitad-client/responses"
@@ -19,7 +18,7 @@ func (r OfflineReceipts) Get(request requests.OfflineReceipts) (*responses.Offli
 	}
 	resp, err := r.get(request)
 	if err != nil {
-		if !client.IsAuthError(err) {
+		if !internal.IsAuthError(err) {
 			return nil, err
 		}
 		if err2 := r.AutoRefresh(true); err2 != nil {

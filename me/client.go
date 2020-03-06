@@ -1,23 +1,23 @@
 package me
 
 import (
-	client "github.com/lueurxax/go-admitad-client"
 	"github.com/lueurxax/go-admitad-client/enums"
+	"github.com/lueurxax/go-admitad-client/internal"
 	"github.com/lueurxax/go-admitad-client/responses"
 )
 
-type Payment struct {
-	baseClient *client.AClient
+type Me struct {
+	*internal.BaseClient
 }
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/private/payment-settings/
-func (c *Payment) Settings() error {
+func (c *Me) Settings() error {
 	answer := new(responses.PaymentDataInformation)
 	errResponse := new(responses.ErrorResponse)
 
-	resp, err := c.baseClient.R().EnableTrace().
-		SetAuthToken(c.baseClient.Token).
+	resp, err := c.R().EnableTrace().
+		SetAuthToken(c.Token).
 		SetResult(answer).
 		SetError(errResponse).
 		Get("/me/payment/settings/")
@@ -35,12 +35,12 @@ func (c *Payment) Settings() error {
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/private/payment-settings/
-func (c *Payment) SettingsByCurrency(currency enums.Currency) error {
+func (c *Me) SettingsByCurrency(currency enums.Currency) error {
 	answer := new(responses.PaymentDataInformation)
 	errResponse := new(responses.ErrorResponse)
 
-	resp, err := c.baseClient.R().EnableTrace().
-		SetAuthToken(c.baseClient.Token).
+	resp, err := c.R().EnableTrace().
+		SetAuthToken(c.Token).
 		SetResult(answer).
 		SetError(errResponse).
 		Get("/me/payment/settings/" + string(currency))
@@ -58,12 +58,12 @@ func (c *Payment) SettingsByCurrency(currency enums.Currency) error {
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/private/user-balance/
-func (c *Payment) Balance() error {
+func (c *Me) Balance() error {
 	answer := new(responses.Balance)
 	errResponse := new(responses.ErrorResponse)
 
-	resp, err := c.baseClient.R().EnableTrace().
-		SetAuthToken(c.baseClient.Token).
+	resp, err := c.R().EnableTrace().
+		SetAuthToken(c.Token).
 		SetResult(answer).
 		SetError(errResponse).
 		Get("/me/balance/")
@@ -81,12 +81,12 @@ func (c *Payment) Balance() error {
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/private/user-balance/
-func (c *Payment) BalanceExtended() error {
+func (c *Me) BalanceExtended() error {
 	answer := new(responses.Balance)
 	errResponse := new(responses.ErrorResponse)
 
-	resp, err := c.baseClient.R().EnableTrace().
-		SetAuthToken(c.baseClient.Token).
+	resp, err := c.R().EnableTrace().
+		SetAuthToken(c.Token).
 		SetResult(answer).
 		SetError(errResponse).
 		Get("/me/balance/extended/")
@@ -104,12 +104,12 @@ func (c *Payment) BalanceExtended() error {
 
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/private/user/
-func (c *Payment) Me() error {
+func (c *Me) Me() error {
 	answer := new(responses.Me)
 	errResponse := new(responses.ErrorResponse)
 
-	resp, err := c.baseClient.R().EnableTrace().
-		SetAuthToken(c.baseClient.Token).
+	resp, err := c.R().EnableTrace().
+		SetAuthToken(c.Token).
 		SetResult(answer).
 		SetError(errResponse).
 		Get("/me/")

@@ -120,3 +120,13 @@ func (b *BaseClient) SetAuth(clientID string, secret string, scope string) error
 	b.setToken(answer)
 	return nil
 }
+
+func IsAuthError(err error) bool {
+	switch e := err.(type) {
+	case *responses.ErrorResponse:
+		if e.StatusCode == 401 {
+			return true
+		}
+	}
+	return false
+}
