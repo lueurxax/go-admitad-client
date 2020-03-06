@@ -26,7 +26,7 @@ func (r *OfflineReceipts) Params() (map[string]string, map[string]interface{}) {
 
 	if r.WebsiteID != nil {
 		logParams["website_id"] = r.WebsiteID
-		params["website_id"] = string(*r.WebsiteID)
+		params["website_id"] = strconv.Itoa(*r.WebsiteID)
 	}
 
 	if r.ID != "" {

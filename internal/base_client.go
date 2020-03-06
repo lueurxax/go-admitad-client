@@ -43,11 +43,11 @@ func NewBaseClient(url string, logger Logger, metrics MetricsCollector) *BaseCli
 
 func (b *BaseClient) AutoRefresh(force bool) error {
 	if b.Auth == nil {
-		return fmt.Errorf("need use SetAuth for set auth data")
+		return fmt.Errorf("need to use SetAuth to set auth data")
 	}
 
 	if b.Auth.tokenExpiredAt.Sub(time.Now()) > 0 && !force {
-		b.Logger.Debug("token is actual", "/token/", nil, nil)
+		b.Logger.Debug("the token is up-to-date", "/token/", nil, nil)
 		return nil
 	}
 	answer, errResponse := new(responses.Token), new(responses.ErrorResponse)
