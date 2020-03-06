@@ -1,14 +1,24 @@
 package client
 
 import (
+	"github.com/lueurxax/go-admitad-client/currencies"
 	"github.com/lueurxax/go-admitad-client/defaults"
 	"github.com/lueurxax/go-admitad-client/internal"
+	"github.com/lueurxax/go-admitad-client/me"
 	"github.com/lueurxax/go-admitad-client/news"
+	offlineReceipts "github.com/lueurxax/go-admitad-client/offline_receipts"
+	"github.com/lueurxax/go-admitad-client/tickets"
 )
 
 type AClient struct {
 	Statistics
 	news.News
+	currencies.Currencies
+	me.Me
+	offlineReceipts.OfflineReceipts
+	tickets.Ticket
+
+
 
 	bc *internal.BaseClient
 }
@@ -21,7 +31,14 @@ func New(url string, logger internal.Logger, mc internal.MetricsCollector) *ACli
 		mc = &defaults.EmptyMetrics{}
 	}
 	bc := internal.NewBaseClient(url, logger, mc)
-	return &AClient{Statistics: Statistics{bc}, bc: bc}
+	return &AClient{
+		Statistics: Statistics{bc},
+		News: news.News{bc},
+		Currencies: currencies.Currencies{bc},
+		Me: me.Me{bc},
+		OfflineReceipts: offlineReceipts.OfflineReceipts{bc},
+		Ticket: tickets.Ticket{bc},
+		bc: bc}
 }
 
 func (ac *AClient) SetAuth(clientID, clientSecret, scope string) error {
