@@ -43,11 +43,11 @@ func NewBaseClient(url string, logger Logger, metrics MetricsCollector) *BaseCli
 
 func (b *BaseClient) AutoRefresh(force bool) error {
 	if b.Auth == nil {
-		return fmt.Errorf("need use SetAuth for set auth data")
+		return fmt.Errorf("need to use SetAuth to set auth data")
 	}
 
 	if b.Auth.tokenExpiredAt.Sub(time.Now()) > 0 && !force {
-		b.Logger.Debug("token is actual", "/token/", nil, nil)
+		b.Logger.Debug("the token is up-to-date", "/token/", nil, nil)
 		return nil
 	}
 	answer, errResponse := new(responses.Token), new(responses.ErrorResponse)
@@ -88,7 +88,7 @@ func (b *BaseClient) AutoRefresh(force bool) error {
 
 func (b *BaseClient) setToken(token *responses.Token) {
 	b.Auth = &auth{
-		tokenExpiredAt: time.Now().Add(time.Duration(token.ExpiresIN)*time.Second - 5*time.Minute),
+		tokenExpiredAt: time.Now().Add(time.Duration(token.ExpiresIn)*time.Second - 5*time.Minute),
 		Token:          token.AccessToken,
 		refreshToken:   token.RefreshToken,
 	}
@@ -119,4 +119,14 @@ func (b *BaseClient) SetAuth(clientID string, secret string, scope string) error
 
 	b.setToken(answer)
 	return nil
+}
+
+func IsAuthError(err error) bool {
+	switch e := err.(type) {
+	case *responses.ErrorResponse:
+		if e.StatusCode == 401 {
+			return true
+		}
+	}
+	return false
 }
