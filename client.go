@@ -18,8 +18,6 @@ type AClient struct {
 	offlineReceipts.OfflineReceipts
 	tickets.Ticket
 
-
-
 	bc *internal.BaseClient
 }
 
@@ -32,13 +30,13 @@ func New(url string, logger internal.Logger, mc internal.MetricsCollector) *ACli
 	}
 	bc := internal.NewBaseClient(url, logger, mc)
 	return &AClient{
-		Statistics: Statistics{bc},
-		News: news.News{bc},
-		Currencies: currencies.Currencies{bc},
-		Me: me.Me{bc},
-		OfflineReceipts: offlineReceipts.OfflineReceipts{bc},
-		Ticket: tickets.Ticket{bc},
-		bc: bc}
+		Statistics:      Statistics{bc},
+		News:            news.News{BaseClient: bc},
+		Currencies:      currencies.Currencies{BaseClient: bc},
+		Me:              me.Me{BaseClient: bc},
+		OfflineReceipts: offlineReceipts.OfflineReceipts{BaseClient: bc},
+		Ticket:          tickets.NewTicket(bc),
+		bc:              bc}
 }
 
 func (ac *AClient) SetAuth(clientID, clientSecret, scope string) error {

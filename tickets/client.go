@@ -12,6 +12,10 @@ type Ticket struct {
 	baseClient *internal.BaseClient
 }
 
+func NewTicket(baseClient *internal.BaseClient) Ticket {
+	return Ticket{baseClient: baseClient}
+}
+
 // todo: naming, testing, function description
 // https://www.admitad.com/ru/developers/doc/api_ru/methods/tickets/tickets-list/
 func (c *Ticket) ByID(id int) error {
