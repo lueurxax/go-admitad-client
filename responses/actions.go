@@ -100,14 +100,20 @@ type Actions struct {
 	Meta    `json:"_meta"`
 }
 type Position struct {
-	TariffID   int       `json:"tariff_id"`
-	Payment    float64   `json:"payment"`
-	Rate       string    `json:"rate"`
-	Datetime   time.Time `json:"datetime"`
-	Amount     float64   `json:"amount"`
-	Percentage bool      `json:"percentage"`
-	ProductUrl string    `json:"product_url"`
-	ID         int       `json:"id"`
+	TariffID            int       `json:"tariff_id"`
+	Payment             float64   `json:"payment"`
+	Rate                string    `json:"rate"`
+	RateID              int       `json:"rate_id"`
+	Datetime            time.Time `json:"datetime"`
+	Amount              float64   `json:"amount"`
+	Percentage          bool      `json:"percentage"`
+	ProductID           string    `json:"product_id"`
+	ProductName         string    `json:"product_name"`
+	ProductImage        string    `json:"product_image"`
+	ProductUrl          string    `json:"product_url"`
+	ProductCategoryID   string    `json:"product_category_id"`
+	ProductCategoryName string    `json:"product_category_name"`
+	ID                  int       `json:"id"`
 }
 
 func (p *Position) UnmarshalJSON(data []byte) error {
